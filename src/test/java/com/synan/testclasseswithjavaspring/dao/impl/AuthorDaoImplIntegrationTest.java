@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -52,6 +53,20 @@ public class AuthorDaoImplIntegrationTest {
         assertThat(result)
                 .hasSize(3).
                 containsExactly(authorA, authorB, authorC);
+    }
+
+    @Test
+    public void testThatAuthorCanBeUpdated(){
+        Author author = TestDataUtil.createTestAuthor();
+        underTest.create(author);
+
+        author.setName("UPDATED");
+        underTest.update(author.getId(), author);
+
+        Optional<Author> result = underTest.findOne(author.getId());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(author);
+
     }
 
 }
